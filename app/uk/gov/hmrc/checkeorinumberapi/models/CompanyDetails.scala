@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.checkeorinumberapi.controllers
+package uk.gov.hmrc.checkeorinumberapi.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.checkeorinumberapi.config.AppConfig
+import play.api.libs.json.{Json, OFormat}
 
-import scala.concurrent.Future
+case class CompanyDetails (
+  traderName: TraderName,
+  address: Address
+)
 
-@Singleton()
-class MicroserviceHelloWorldController @Inject()(appConfig: AppConfig, cc: ControllerComponents)
-    extends BackendController(cc) {
-
-  def hello(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Hello world"))
-  }
+object CompanyDetails {
+  implicit val format: OFormat[CompanyDetails] = Json.format[CompanyDetails]
 }

@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.checkeorinumberapi.controllers
+package uk.gov.hmrc.checkeorinumberapi.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.checkeorinumberapi.config.AppConfig
+import java.time.{ZoneId, ZonedDateTime}
 
-import scala.concurrent.Future
+import play.api.libs.json.{Json, OFormat}
 
-@Singleton()
-class MicroserviceHelloWorldController @Inject()(appConfig: AppConfig, cc: ControllerComponents)
-    extends BackendController(cc) {
+case class CheckResponse (
+  eori: EoriNumber,
+  valid: Boolean,
+  companyDetails: Option[CompanyDetails],
+  processingDate: ProcessingDate = ZonedDateTime.now.withZoneSameInstant(ZoneId.of("Europe/London"))
+)
 
-  def hello(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Hello world"))
-  }
+object CheckResponse {
+  implicit val checkResponseFormat: OFormat[CheckResponse] = Json.format[CheckResponse]
 }
