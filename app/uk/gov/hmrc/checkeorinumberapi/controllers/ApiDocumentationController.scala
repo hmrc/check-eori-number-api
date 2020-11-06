@@ -15,12 +15,29 @@
  */
 
 package uk.gov.hmrc.checkeorinumberapi.controllers
+
+import controllers.Assets
+import javax.inject.Inject
+import play.api.http.{ContentTypes, MimeTypes}
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, Codec, ControllerComponents}
+import uk.gov.hmrc.checkeorinumberapi.config.AppContext
+import uk.gov.hmrc.customs.api.common.controllers.DocumentationController
+import views.txt
 
-class ApiDocumentationController {
+import scala.concurrent.Future
 
-  def definition(): Action[AnyContent] = ??? //play.mvc.Results.TODO
+class ApiDocumentationController @Inject()(
+  assets: Assets,
+  cc: ControllerComponents,
+  appContext: AppContext
+) extends DocumentationController(assets, cc) {
 
-  def conf(version: String, file: String) = ??? //play.mvc.Results.TODO
+  def definition(): Action[AnyContent] = Action.async {
+    Future.successful(
+      Ok(txt.definition(
+          appContext.apiContext
+        )
+      ).as(ContentTypes.withCharset(MimeTypes.JSON)(Codec.utf_8)))
+  }
 }

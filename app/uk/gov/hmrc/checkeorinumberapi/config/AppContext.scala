@@ -18,13 +18,12 @@ package uk.gov.hmrc.checkeorinumberapi.config
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
-
-  val authBaseUrl: String = servicesConfig.baseUrl("auth")
-
-  val auditingEnabled: Boolean = config.get[Boolean]("auditing.enabled")
-  val graphiteHost: String     = config.get[String]("microservice.metrics.graphite.host")
+class AppContext @Inject()(configuration: Configuration) {
+  private val apiScopeConfigKey = "api.definition.scope"
+  private val apiContextConfigKey = "api.context"
+  private def apiConfigException(apiConfigKey: String) = new IllegalStateException(s"$apiConfigKey is not configured")
+  lazy val apiScopeKey: String = configuration.getOptional[String](apiScopeConfigKey).getOrElse(throw apiConfigException(apiScopeConfigKey))
+  lazy val apiContext: String = configuration.getOptional[String](apiContextConfigKey).getOrElse(throw apiConfigException(apiContextConfigKey))
 }

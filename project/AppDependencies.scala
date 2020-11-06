@@ -1,19 +1,21 @@
-import play.core.PlayVersion.current
-import play.sbt.PlayImport._
-import sbt.Keys.libraryDependencies
 import sbt._
 
 object AppDependencies {
 
-  val compile = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-backend-play-27"  % "2.24.0"
-  )
+  private val customsApiCommonVersion = "1.53.0"
+  private val mockitoVersion = "3.5.9"
+  private val scalaTestPlusPlayVersion = "4.0.3"
+  private val wireMockVersion = "2.27.2"
+  private val testScope = "test,component"
 
-  val test = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-test-play-27"   % "2.24.0" % Test,
-    "org.scalatest"           %% "scalatest"                % "3.1.2"                 % Test,
-    "com.typesafe.play"       %% "play-test"                % current                 % Test,
-    "com.vladsch.flexmark"    %  "flexmark-all"             % "0.35.10"               % "test, it",
-    "org.scalatestplus.play"  %% "scalatestplus-play"       % "4.0.3"                 % "test, it"
-  )
+  val customsApiCommon = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion withSources()
+
+  val mockito = "org.mockito" % "mockito-core" % mockitoVersion % testScope
+
+  val scalaTestPlusPlay = "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusPlayVersion % testScope
+
+  val wireMock = "com.github.tomakehurst" % "wiremock-jre8" % wireMockVersion % testScope
+
+  val customsApiCommonTests = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion % testScope classifier "tests"
+
 }
