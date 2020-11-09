@@ -16,31 +16,48 @@
 
 package uk.gov.hmrc.checkeorinumberapi.connectors
 
-import javax.inject.Inject
+import com.google.inject.ImplementedBy
+import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.checkeorinumberapi.models.{CheckResponse, EoriNumber}
+import uk.gov.hmrc.checkeorinumberapi.models.{CheckMultipleEoriNumbersRequest, CheckResponse, EoriNumber}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckEoriNumberConnector @Inject()(
+@ImplementedBy(classOf[CheckEoriNumberConnectorImpl])
+trait CheckEoriNumberConnector {
+
+  def checkEoriNumbers(
+    check: CheckMultipleEoriNumbersRequest
+  )(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[Option[List[CheckResponse]]]
+
+}
+
+@Singleton
+class CheckEoriNumberConnectorImpl @Inject()(
   http: HttpClient,
   environment: Environment,
   configuration: Configuration,
   servicesConfig: ServicesConfig
-) {
+) extends CheckEoriNumberConnector {
 
   lazy val chenUrl: String = servicesConfig.getConfString("check-eori-number.url", "")
   lazy val eisUrl: String = s"${servicesConfig.baseUrl("check-eori-number")}/$chenUrl"
 
-  def check(
-    eoriNumber: EoriNumber
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[List[CheckResponse]]] = {
-    http.GET[List[CheckResponse]](
-      url = s"$eisUrl/check-eori/$eoriNumber").map(Some(_)
-    )
-  }
+  // TODO decide how big the post/list can be!!!! (@adam.dye - tech lead)
+  def checkEoriNumbers(
+    check: CheckMultipleEoriNumbersRequest
+  )(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[Option[List[CheckResponse]]] =
+    http.POST[CheckMultipleEoriNumbersRequest, List[CheckResponse]](
+      url = s"$eisUrl/check-multiple-eori", body = check
+    ).map(Some(_))
 
 }
