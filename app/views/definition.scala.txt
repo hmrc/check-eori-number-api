@@ -3,8 +3,8 @@
 {
   "scopes":[],
   "api": {
-    "name": "Pull Notifications",
-    "description": "Allows for retrieval of notifications",
+    "name": "Check a UK EORI Number",
+    "description": "Allows for retrieval of EORI numbers",
     "context": "@apiContext",
     "versions": [
       {
