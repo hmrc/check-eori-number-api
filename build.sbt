@@ -82,7 +82,7 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
 )
 
 def componentTestFilter(name: String): Boolean = name startsWith "component"
-def unitTestFilter(name: String): Boolean = name startsWith "unit"
+def unitTestFilter(name: String): Boolean = !componentTestFilter(name)
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
