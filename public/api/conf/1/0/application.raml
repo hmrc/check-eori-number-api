@@ -1,0 +1,79 @@
+#%RAML 1.0
+---
+
+title: Check a UK EORI Number
+version: 1.0
+protocols: [ HTTPS ]
+baseUri: https://api.service.hmrc.gov.uk/
+mediaType: [ application/json ]
+
+uses:
+  sec: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/securitySchemes.raml
+  annotations: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/annotations.raml
+  types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
+
+documentation:
+  - title: Overview
+    content: !include docs/overview.md
+  - title: Versioning
+    content: !include https://developer.service.hmrc.gov.uk/api-documentation/assets/common/docs/versioning.md
+  - title: Errors
+    content: !include https://developer.service.hmrc.gov.uk/api-documentation/assets/common/docs/errors.md
+  - title: Testing
+    content: !include docs/testing.md
+
+#TODO update url
+/organisations/vat:
+    /check-eori-number/check-multiple-eori:
+      post:
+        body:
+          application/json:
+#            type: !include schemas/post-gmr-schema.json
+            examples:
+              example-1:
+                description: "Check multiple EORI Numbers"
+                value: {
+                  "eoris": [
+                    "GB123456789131",
+                    "GB123456789123",
+                    "GB123456789112"
+                    ]
+                }
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  [{
+                      "eori": "GB123456782",
+                      "valid": true,
+                      "companyDetails": {
+                          "traderName": "Holding",
+                          "address": {
+                              "streetAndNumber": "60 Peasefold",
+                              "cityName": "Chelmsford",
+                              "postcode": "CM15 2EU"
+                          }
+                      },
+                      "processingDate": "2020-11-08T23:05:58.957Z[Europe/London]"
+                  }]
+          400:
+            body:
+              application/json:
+                schema: !include "schemas/error.json"
+                description: Invalid request
+                example: |
+                  {
+                    "code": "INVALID_REQUEST",
+                    "message": "Invalid eori - eori parameters should be between 12 or 15 digits"
+                  }
+          500:
+            body:
+              application/json:
+                schema: !include "schemas/error.json"
+                description: Internal server error
+                example: |
+                  {
+                    "code": "INTERNAL_SERVER_ERROR",
+                    "message": "Unknown error"
+                  }
