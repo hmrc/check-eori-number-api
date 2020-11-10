@@ -18,13 +18,13 @@ package uk.gov.hmrc.checkeorinumberapi.controllers
 
 import play.api.http.Status
 import play.api.libs.json.Json
-import play.api.mvc.ControllerComponents
 import play.api.test.Helpers._
+import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.checkeorinumberapi.connectors.CheckEoriNumberConnector
 import uk.gov.hmrc.checkeorinumberapi.models.{CheckMultipleEoriNumbersRequest, CheckResponse, EoriNumber}
 import uk.gov.hmrc.checkeorinumberapi.utils.BaseSpec
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,9 +45,9 @@ class EoriControllerSpec extends BaseSpec {
       implicit hc: HeaderCarrier,
       ec: ExecutionContext
     ): Future[Option[List[CheckResponse]]] = check.eoriNumbers match {
-      case a if a.head == eoriNumber => Future.successful(Some(List(checkResponse)))
-      case b if b.head == invalidEoriNumber => Future.successful(Some(List(invalidCheckResponse)))
-      case _ => Future.successful(Some(List(checkResponse)))
+      case `eoriNumber`::Nil  => Future.successful(Some(List(checkResponse)))
+      case `invalidEoriNumber`::Nil  => Future.successful(Some(List(invalidCheckResponse)))
+      case `eoriNumber`::`invalidEoriNumber`::Nil  => Future.successful(Some(List(checkResponse, invalidCheckResponse)))
     }
   }
 
@@ -70,6 +70,25 @@ class EoriControllerSpec extends BaseSpec {
     "return expected invalid-eori Json" in {
       val result = controller.check(invalidEoriNumber)(fakeRequest)
       contentAsJson(result) shouldEqual Json.toJson(invalidCheckResponse)
+    }
+  }
+
+  "POST /check-multiple-eori" should {
+    val jsonBody = Json.toJson(
+      CheckMultipleEoriNumbersRequest(
+        List(eoriNumber, invalidEoriNumber)
+      )
+    )
+    val request = FakeRequest("POST", "/check-multiple-eori", FakeHeaders(), jsonBody)
+    "return 200" in {
+      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris().apply(request)
+      status(result) shouldBe Status.OK
+    }
+    "return expected Json" in {
+      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris().apply(request)
+      contentAsJson(result) shouldEqual Json.toJson(
+        List(checkResponse, invalidCheckResponse)
+      )
     }
   }
 
