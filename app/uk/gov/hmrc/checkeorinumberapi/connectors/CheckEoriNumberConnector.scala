@@ -48,8 +48,8 @@ class CheckEoriNumberConnectorImpl @Inject()(
 
   lazy val chenUrl: String = servicesConfig.getConfString("check-eori-number.url", "")
   lazy val eisUrl: String = s"${servicesConfig.baseUrl("check-eori-number")}/$chenUrl"
-
-  // TODO decide how big the post/list can be!!!! (@adam.dye - tech lead)
+  
+  // TODO decide how big the lookup list can be!
   def checkEoriNumbers(
     check: CheckMultipleEoriNumbersRequest
   )(
