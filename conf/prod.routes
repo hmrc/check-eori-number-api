@@ -1,5 +1,8 @@
-# Add all the application routes to the app.routes file
-->         /check-eori-number-api              app.Routes
-->         /                          health.Routes
+->            /                      health.Routes
+->            /                      dynamicDefinition.Routes
 
-GET        /admin/metrics             com.kenshoo.play.metrics.MetricsController.metrics
+GET           /admin/metrics         @com.kenshoo.play.metrics.MetricsController.metrics
+
+GET           /:eoriNumber           @uk.gov.hmrc.checkeorinumberapi.controllers.EoriController.check(eoriNumber: String)
+POST          /check-multiple-eori   @uk.gov.hmrc.checkeorinumberapi.controllers.EoriController.checkMultipleEoris
+

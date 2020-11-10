@@ -1,19 +1,19 @@
-import play.core.PlayVersion.current
-import play.sbt.PlayImport._
-import sbt.Keys.libraryDependencies
 import sbt._
+import play.core.PlayVersion._
 
 object AppDependencies {
 
-  val compile = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-backend-play-27"  % "2.24.0"
-  )
+  private val customsApiCommonVersion = "1.53.0"
+  private val scalaTestPlusPlayVersion = "4.0.3"
+  private val scalaTestVersion = "3.1.2"
+  private val flexmarkVersion = "0.35.10"
+  private val testScope = "test,component"
 
-  val test = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-test-play-27"   % "2.24.0" % Test,
-    "org.scalatest"           %% "scalatest"                % "3.1.2"                 % Test,
-    "com.typesafe.play"       %% "play-test"                % current                 % Test,
-    "com.vladsch.flexmark"    %  "flexmark-all"             % "0.35.10"               % "test, it",
-    "org.scalatestplus.play"  %% "scalatestplus-play"       % "4.0.3"                 % "test, it"
-  )
+  val customsApiCommon = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion withSources()
+  val scalaTest = "org.scalatest" %% "scalatest" % scalaTestVersion % testScope
+  val playTest = "com.typesafe.play" %% "play-test" % current % testScope
+  val scalaTestPlusPlay = "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusPlayVersion % testScope
+  val flexmark = "com.vladsch.flexmark" % "flexmark-all" % flexmarkVersion % testScope
+  val customsApiCommonTests = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion % testScope classifier "tests"
+
 }
