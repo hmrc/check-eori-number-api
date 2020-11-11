@@ -36,9 +36,9 @@ class EoriController @Inject()(
 
   def check(eoriNumber: EoriNumber): Action[AnyContent] = Action.async { implicit request =>
     connector.checkEoriNumbers(CheckMultipleEoriNumbersRequest(List(eoriNumber))).map {
-      case Some(response) => response.headOption match {
-        case r@Some(CheckResponse(_, true, _, _)) => Ok(Json.toJson(r))
-        case r@Some(CheckResponse(_, false, _, _)) => NotFound(Json.toJson(r))
+      case Some(head::_) => {
+        if (head.valid) Ok(Json.toJson(head))
+        else NotFound(Json.toJson(head))
       }
     }.recover {
       case e =>
