@@ -6,6 +6,7 @@
     "name": "Check a UK EORI Number",
     "description": "Allows for retrieval of EORI numbers",
     "context": "@apiContext",
+    "categories": ["CUSTOMS"],
     "versions": [
       {
         "version": "1.0",
