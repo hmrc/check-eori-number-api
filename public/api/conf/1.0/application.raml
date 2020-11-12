@@ -30,7 +30,6 @@ documentation:
         displayName: Check multiple eori numbers
         description: !include docs/check-multiple-eoris-post.md
         is: [headers.acceptHeader, headers.contentHeader]
-        (annotations.scope): "read:check-eori-number-api"
         body:
           application/json:
             type: !include schemas/post-multiple-eoris.json
