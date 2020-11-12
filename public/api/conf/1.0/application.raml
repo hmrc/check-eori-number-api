@@ -9,6 +9,7 @@ mediaType: [ application/json ]
 
 uses:
   sec: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/securitySchemes.raml
+  headers: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/headers.raml
   annotations: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/annotations.raml
   types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
 
@@ -23,40 +24,28 @@ documentation:
     content: !include docs/testing.md
 
 #TODO update url
-/organisations/vat:
-    /check-eori-number/check-multiple-eori:
+/customs/eori/lookup:
+    /check-multiple-eori:
       post:
+        displayName: Check multiple eori numbers
+        description: !include docs/check-multiple-eoris-post.md
+        is: [headers.acceptHeader, headers.contentHeader]
+        (annotations.scope): "read:check-eori-number-api"
         body:
           application/json:
-#            type: !include schemas/post-gmr-schema.json
+            type: !include schemas/post-multiple-eoris.json
             examples:
               example-1:
-                description: "Check multiple EORI Numbers"
-                value: {
-                  "eoris": [
-                    "GB123456789131",
-                    "GB123456789123",
-                    "GB123456789112"
-                    ]
-                }
+                description: "Check multiple EORI Numbers example"
+                value: !include examples/post-multiple-eoris-request-example-1.json
         responses:
           200:
             body:
               application/json:
-                example: |
-                  [{
-                      "eori": "GB123456782",
-                      "valid": true,
-                      "companyDetails": {
-                          "traderName": "Holding",
-                          "address": {
-                              "streetAndNumber": "60 Peasefold",
-                              "cityName": "Chelmsford",
-                              "postcode": "CM15 2EU"
-                          }
-                      },
-                      "processingDate": "2020-11-08T23:05:58.957Z[Europe/London]"
-                  }]
+                examples:
+                 example-1:
+                  description: "Check multiple EORI Numbers example"
+                  value: !include examples/post-mulitple-eoris-response-example-1.json
           400:
             body:
               application/json:

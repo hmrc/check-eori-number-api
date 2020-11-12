@@ -1,0 +1,25 @@
+[
+  {
+    "eori": "GB123456789131",
+    "valid": true,
+    "companyDetails": {
+      "traderName": "Holding",
+      "address": {
+        "streetAndNumber": "60 Peasefold",
+        "cityName": "Chelmsford",
+        "postcode": "CM15 2EU"
+      }
+    },
+    "processingDate": "2020-11-08T23:05:58.957Z[Europe/London]"
+  },
+  {
+    "eori": "GB123456789136",
+    "valid": true
+    "processingDate": "2020-11-08T23:05:58.957Z[Europe/London]"
+  },
+  {
+    "eori": "GB8392848394939",
+    "valid": false
+    "processingDate": "2020-11-08T23:05:58.957Z[Europe/London]"
+  }
+]
