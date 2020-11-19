@@ -18,12 +18,15 @@ package uk.gov.hmrc.checkeorinumberapi.config
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class AppContext @Inject()(configuration: Configuration) {
-  private val apiScopeConfigKey = "api.definition.scope"
-  private val apiContextConfigKey = "api.context"
-  private def apiConfigException(apiConfigKey: String) = new IllegalStateException(s"$apiConfigKey is not configured")
-  lazy val apiScopeKey: String = configuration.getOptional[String](apiScopeConfigKey).getOrElse(throw apiConfigException(apiScopeConfigKey))
-  lazy val apiContext: String = configuration.getOptional[String](apiContextConfigKey).getOrElse(throw apiConfigException(apiContextConfigKey))
+class AppContext @Inject()(configuration: Configuration, servicesConfig: ServicesConfig) {
+
+  private lazy val chenUrl: String = servicesConfig.getConfString("check-eori-number.url", "")
+  lazy val eisUrl: String = s"${servicesConfig.baseUrl("check-eori-number")}/$chenUrl"
+
+  lazy val apiContext: String = servicesConfig.getString("api.context")
+  lazy val allowXiEoriNumbers: Boolean = servicesConfig.getBoolean("allowXiEoriNumbers")
+  lazy val eisApiLimit: Int = servicesConfig.getInt("eisApiLimit")
 }

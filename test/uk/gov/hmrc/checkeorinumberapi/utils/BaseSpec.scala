@@ -22,6 +22,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.FakeRequest
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.checkeorinumberapi.config.AppContext
+import uk.gov.hmrc.checkeorinumberapi.models.{CheckResponse, EoriNumber}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -33,8 +34,32 @@ trait BaseSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   val env                       = Environment.simple()
   val configuration             = Configuration.load(env)
   val serviceConfig             = new ServicesConfig(configuration)
-  val appContext                = new AppContext(configuration)
+  val appContext                = new AppContext(configuration, serviceConfig)
   implicit val executionContext = app.injector.instanceOf[ExecutionContext]
   implicit val headerCarrier    = HeaderCarrier()
+
+
+  val eoriNumber: EoriNumber = "GB123456789000"
+  val invalidEoriNumber: EoriNumber = "GB999999999999"
+  val checkResponse = CheckResponse(eoriNumber, true, None)
+  val invalidCheckResponse = CheckResponse(invalidEoriNumber, false, None)
+
+  val notAEoriNumber = List("AA123456789")
+  val xiEoriNumbers = List("XI123456789123", "XI3219876543210")
+  val validAndInvalidEoris = List(eoriNumber, invalidEoriNumber)
+  val eorisExceedingLimit = List(
+    eoriNumber,
+    eoriNumber,
+    eoriNumber,
+    eoriNumber,
+    eoriNumber,
+    invalidEoriNumber,
+    invalidEoriNumber,
+    invalidEoriNumber,
+    invalidEoriNumber,
+    invalidEoriNumber,
+    invalidEoriNumber
+  )
+
 
 }

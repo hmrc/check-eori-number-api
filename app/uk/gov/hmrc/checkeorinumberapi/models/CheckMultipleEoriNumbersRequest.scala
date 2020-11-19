@@ -24,5 +24,4 @@ case class CheckMultipleEoriNumbersRequest(
 
 object CheckMultipleEoriNumbersRequest {
   implicit val format: OFormat[CheckMultipleEoriNumbersRequest] = Json.format[CheckMultipleEoriNumbersRequest]
-
 }

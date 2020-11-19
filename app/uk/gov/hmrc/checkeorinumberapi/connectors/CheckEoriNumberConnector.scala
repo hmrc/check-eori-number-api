@@ -19,10 +19,11 @@ package uk.gov.hmrc.checkeorinumberapi.connectors
 import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Environment}
+import uk.gov.hmrc.checkeorinumberapi.config.AppContext
 import uk.gov.hmrc.checkeorinumberapi.models.{CheckMultipleEoriNumbersRequest, CheckResponse, EoriNumber}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,13 +44,9 @@ class CheckEoriNumberConnectorImpl @Inject()(
   http: HttpClient,
   environment: Environment,
   configuration: Configuration,
-  servicesConfig: ServicesConfig
+  appContext: AppContext
 ) extends CheckEoriNumberConnector {
 
-  lazy val chenUrl: String = servicesConfig.getConfString("check-eori-number.url", "")
-  lazy val eisUrl: String = s"${servicesConfig.baseUrl("check-eori-number")}/$chenUrl"
-  
-  // TODO decide how big the lookup list can be!
   def checkEoriNumbers(
     check: CheckMultipleEoriNumbersRequest
   )(
@@ -57,7 +54,7 @@ class CheckEoriNumberConnectorImpl @Inject()(
     ec: ExecutionContext
   ): Future[Option[List[CheckResponse]]] =
     http.POST[CheckMultipleEoriNumbersRequest, List[CheckResponse]](
-      url = s"$eisUrl/check-multiple-eori", body = check
+      url = s"${appContext.eisUrl}/check-multiple-eori", body = check
     ).map(Some(_))
 
 }
