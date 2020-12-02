@@ -4,7 +4,7 @@
   "description": "EIS GB & XI EORI Checker Request Service  v0.02",
   "type": "object",
   "properties": {
-    "eoriNumbers": {
+    "eoris": {
       "description": "The unique identifier, also known as the eori number",
       "type": "array",
       "minItems": 1,
@@ -17,7 +17,7 @@
     }
   },
   "required": [
-    "eoriNumbers"
+    "eoris"
   ],
   "additionalProperties": false
 }
