@@ -41,7 +41,7 @@ class EoriController @Inject()(
   def checkMultipleEoris: Action[JsValue] = {
     Action.async(parse.json) { implicit request =>
       withJsonBody[CheckMultipleEoriNumbersRequest](cmr => {
-        cmr.eoriNumbers match {
+        cmr.eoris match {
           case Nil =>
             Future.successful(
               BadRequest(
