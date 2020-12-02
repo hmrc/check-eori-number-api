@@ -3,7 +3,7 @@
 {
   "scopes":[],
   "api": {
-    "name": "Check a UK EORI Number",
+    "name": "Check an EORI Number",
     "description": "Allows for retrieval of EORI numbers",
     "context": "@apiContext",
     "categories": ["CUSTOMS"],
