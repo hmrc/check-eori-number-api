@@ -3,7 +3,7 @@ import play.core.PlayVersion._
 
 object AppDependencies {
 
-  private val customsApiCommonVersion = "1.53.0"
+  private val customsApiCommonVersion = "1.55.0"
   private val scalaTestPlusPlayVersion = "4.0.3"
   private val scalaTestVersion = "3.1.2"
   private val flexmarkVersion = "0.35.10"
