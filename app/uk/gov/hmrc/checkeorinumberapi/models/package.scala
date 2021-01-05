@@ -26,6 +26,6 @@ package object models {
   type ProcessingDate = ZonedDateTime
 
   implicit class RichProcessingDate(val self: ProcessingDate) {
-    override def toString: String = self.format(DateTimeFormatter.ofPattern("h:mma"))
+    override def toString: String = self.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx"))
   }
 }

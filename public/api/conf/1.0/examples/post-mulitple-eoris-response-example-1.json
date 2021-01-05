@@ -1,25 +1,23 @@
 [
   {
-    "eori": "GB123456789131",
+    "eori": "GB123456789133",
     "valid": true,
     "companyDetails": {
-      "traderName": "Holding",
+      "traderName": "Aviationstr",
       "address": {
-        "streetAndNumber": "60 Peasefold",
-        "cityName": "Chelmsford",
-        "postcode": "CM15 2EU"
+        "streetAndNumber": "141B Halsey Place",
+        "cityName": "Huddersfield",
+        "postcode": "HD98 2LI"
       }
     },
-    "processingDate": "2020-11-08T23:05:58.957Z[Europe/London]"
-  },
-  {
-    "eori": "GB123456789136",
-    "valid": true
-    "processingDate": "2020-11-08T23:05:58.957Z[Europe/London]"
-  },
-  {
+    "processingDate": "2021-01-05T09:54:08+00:00"
+  }, {
+    "eori": "GB123456729136",
+    "valid": true,
+    "processingDate": "2021-01-05T09:54:08+00:00"
+  }, {
     "eori": "GB8392848394939",
-    "valid": false
-    "processingDate": "2020-11-08T23:05:58.957Z[Europe/London]"
+    "valid": false,
+    "processingDate": "2021-01-05T09:54:08+00:00"
   }
 ]

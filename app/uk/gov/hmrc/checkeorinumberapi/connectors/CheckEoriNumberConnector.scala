@@ -20,9 +20,8 @@ import com.google.inject.ImplementedBy
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.checkeorinumberapi.config.AppContext
-import uk.gov.hmrc.checkeorinumberapi.models.{CheckMultipleEoriNumbersRequest, CheckResponse, EoriNumber}
+import uk.gov.hmrc.checkeorinumberapi.models.{CheckMultipleEoriNumbersRequest, CheckResponse}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
