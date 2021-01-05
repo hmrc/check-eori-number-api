@@ -25,7 +25,4 @@ package object models {
   type EoriNumber = String
   type ProcessingDate = ZonedDateTime
 
-  implicit class RichProcessingDate(val self: ProcessingDate) {
-    override def toString: String = self.format(DateTimeFormatter.ofPattern("h:mma"))
-  }
 }

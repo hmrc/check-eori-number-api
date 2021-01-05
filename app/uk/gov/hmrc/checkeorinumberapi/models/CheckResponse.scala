@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.checkeorinumberapi.models
 
+import java.time.format.DateTimeFormatter
 import java.time.{ZoneId, ZonedDateTime}
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json._
 
 case class CheckResponse (
   eori: EoriNumber,
@@ -28,5 +29,11 @@ case class CheckResponse (
 )
 
 object CheckResponse {
-  implicit val checkResponseFormat: OFormat[CheckResponse] = Json.format[CheckResponse]
+  implicit val processingDateWriter: Writes[ProcessingDate] = new Writes[ProcessingDate] {
+    override def writes(o: ProcessingDate): JsValue =
+      JsString(o.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx")))
+  }
+  implicit val checkResponseFormat: Format[CheckResponse] = {
+    Json.format[CheckResponse]
+  }
 }
