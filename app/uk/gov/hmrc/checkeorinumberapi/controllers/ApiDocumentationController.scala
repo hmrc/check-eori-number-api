@@ -16,22 +16,20 @@
 
 package uk.gov.hmrc.checkeorinumberapi.controllers
 
-import controllers.Assets
-import javax.inject.Inject
-import play.api.http.{ContentTypes, MimeTypes}
-import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent, Codec, ControllerComponents}
+import controllers.{AssetsBuilder, AssetsMetadata}
+import play.api.http.{ContentTypes, HttpErrorHandler, MimeTypes}
+import play.api.mvc.{Action, AnyContent, Codec}
 import uk.gov.hmrc.checkeorinumberapi.config.AppContext
-import uk.gov.hmrc.customs.api.common.controllers.DocumentationController
 import views.txt
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
 class ApiDocumentationController @Inject()(
-  assets: Assets,
-  cc: ControllerComponents,
+  httpErrorHandler: HttpErrorHandler,
+  meta: AssetsMetadata,
   appContext: AppContext
-) extends DocumentationController(assets, cc) {
+) extends AssetsBuilder(httpErrorHandler, meta) {
 
   def definition(): Action[AnyContent] = Action.async {
     Future.successful(
@@ -40,4 +38,7 @@ class ApiDocumentationController @Inject()(
         )
       ).as(ContentTypes.withCharset(MimeTypes.JSON)(Codec.utf_8)))
   }
+
+  def conf(version: String, file: String): Action[AnyContent] =
+    super.at(s"/public/api/conf/$version", file)
 }

@@ -22,7 +22,6 @@ import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.checkeorinumberapi.config.AppContext
 import uk.gov.hmrc.checkeorinumberapi.connectors.CheckEoriNumberConnector
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.checkeorinumberapi.models._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,12 +30,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class EoriController @Inject()(
   connector: CheckEoriNumberConnector,
   cc: ControllerComponents,
-  logger: CdsLogger,
   appContext: AppContext
 )(implicit ec: ExecutionContext) extends BackendController(cc) {
 
   private val ukEoriRegex: String = "^(GB|XI)[0-9]{12,15}$"
-  private val xiEoriRegex:String = "^XI[0-9]{12,15}$"
+  private val xiEoriRegex: String = "^XI[0-9]{12,15}$"
 
   def checkMultipleEoris: Action[JsValue] = {
     Action.async(parse.json) { implicit request =>

@@ -1,7 +1,6 @@
 ->            /                      health.Routes
 ->            /                      dynamicDefinition.Routes
+->            /                      app.Routes
 
 GET           /admin/metrics         @com.kenshoo.play.metrics.MetricsController.metrics
-
-POST          /check-multiple-eori   @uk.gov.hmrc.checkeorinumberapi.controllers.EoriController.checkMultipleEoris
 
