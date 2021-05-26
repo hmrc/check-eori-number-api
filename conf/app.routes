@@ -1,0 +1,3 @@
+# microservice specific routes
+
+POST          /check-multiple-eori   @uk.gov.hmrc.checkeorinumberapi.controllers.EoriController.checkMultipleEoris

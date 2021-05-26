@@ -23,14 +23,11 @@ import play.api.test.{FakeHeaders, FakeRequest}
 import uk.gov.hmrc.checkeorinumberapi.connectors.CheckEoriNumberConnector
 import uk.gov.hmrc.checkeorinumberapi.models.{CheckMultipleEoriNumbersRequest, CheckResponse, EoriNumber}
 import uk.gov.hmrc.checkeorinumberapi.utils.BaseSpec
-import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class EoriControllerSpec extends BaseSpec {
-
-  val mockLogger = new CdsLogger(serviceConfig)
 
   val mockConnector = new CheckEoriNumberConnector {
 
@@ -49,7 +46,6 @@ class EoriControllerSpec extends BaseSpec {
   val controller = new EoriController(
     mockConnector,
     stubControllerComponents(),
-    mockLogger,
     appContext
   )
 
