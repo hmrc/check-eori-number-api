@@ -7,7 +7,7 @@ object AppDependencies {
   private val scalaTestPlusPlayVersion = "4.0.3"
   private val scalaTestVersion = "3.1.2"
   private val flexmarkVersion = "0.35.10"
-  private val testScope = "test,component"
+  private val testScope = "test"
 
   val customsApiCommon = "uk.gov.hmrc" %% "customs-api-common" % customsApiCommonVersion withSources()
   val scalaTest = "org.scalatest" %% "scalatest" % scalaTestVersion % testScope
