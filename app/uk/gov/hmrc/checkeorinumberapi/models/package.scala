@@ -17,7 +17,6 @@
 package uk.gov.hmrc.checkeorinumberapi
 
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 package object models {
 
