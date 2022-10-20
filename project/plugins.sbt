@@ -5,7 +5,7 @@ resolvers += Resolver.typesafeRepo("releases")
 
 addSbtPlugin("com.github.sbt" % "sbt-release" % "1.0.15")
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.8")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.17")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-settings" % "4.8.0")
 
@@ -15,7 +15,7 @@ addSbtPlugin("uk.gov.hmrc" % "sbt-git-stamp" % "6.2.0")
 
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.10.0-RC1")
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.8.2")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.0.5")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
