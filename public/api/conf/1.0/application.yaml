@@ -1,0 +1,253 @@
+openapi: 3.0.0
+info:
+  title: Check a UK EORI Number
+  description: |
+    # Overview
+
+    This API enables your application to:
+
+    * check if an EORI number beginning with GB (issued by the UK) is valid.
+    * view the name and address of the business that the EORI number is registered to (if the business agreed to share this information).
+
+    # Versioning
+
+    When an API changes in a way that is backwards-incompatible, we increase the version number of the API. \nSee our [reference guide](/api-documentation/docs/reference-guide#versioning) for more on\nversioning.\nWe use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range:\n* 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action\n* 400 to 499 if it failed because of a client error by your application\n* 500 to 599 if it failed because of an error on our server\n\nErrors specific to each API are shown in the Endpoints section, under Response. \nSee our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors."
+
+    # Errors
+
+    We use standard HTTP status codes to show whether an API request succeeded or not. They are usually in the range
+    * 200 to 299 if it succeeded, including code 202 if it was accepted by an API that needs to wait for further action\n
+    * 400 to 499 if it failed because of a client error by your application\n
+    * 500 to 599 if it failed because of an error on our server\n
+    Errors specific to each API are shown in the Endpoints section, under Response.
+    See our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
+
+    # Testing
+
+    You can use the sandbox environment to [test this API](https://developer.service.hmrc.gov.uk/api-documentation/docs/testing).
+
+    In the sandbox environment the last digit of each EORI Number will return each type of CheckResponse:
+       * 0 or 1 Vaild with no TraderName or Address
+       * 2 to 5 Vaild with TraderName and Address
+       * 6 or 7 Vaild with no TraderName or Address
+       * 8 or 9 Invalid
+
+    [Access a set of mock EORI numbers](https://github.com/hmrc/check-eori-number-api/tree/master/public/api/conf/1.0/test-data) to use when testing in the sandbox environment.
+
+  contact: {}
+  version: '1.0'
+servers:
+- url: https://api.service.hmrc.gov.uk/
+  variables: {}
+paths:
+  /customs/eori/lookup/check-multiple-eori:
+    post:
+      tags:
+      - customs
+      summary: Check multiple eori numbers
+      description: >
+        <p>This endpoint is used to retrieve a list of validated EORI numbers.</p>
+
+
+        <p>The endpoint will also retrieve the business' company name and address if the business has allowed it.</p>
+      operationId: Checkmultipleeorinumbers
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/GBXIEORICheckerService'
+              - example:
+                  eoris:
+                  - GB123456789133
+                  - GB123456789136
+                  - GB8392848394939
+            examples:
+              example-1:
+                description: Check multiple EORI Numbers example
+                value:
+                  eoris:
+                  - GB123456789133
+                  - GB123456789136
+                  - GB8392848394939
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomsEoriLookupCheckMultipleEoriresponse'
+                description: ''
+                example:
+                - eori: GB123456789133
+                  valid: true
+                  companyDetails:
+                    traderName: Aviationstr
+                    address:
+                      streetAndNumber: 141B Halsey Place
+                      cityName: Huddersfield
+                      postcode: HD98 2LI
+                  processingDate: 2021-01-05T09:54:08+00:00
+                - eori: GB123456729136
+                  valid: true
+                  processingDate: 2021-01-05T09:54:08+00:00
+                - eori: GB8392848394939
+                  valid: false
+                  processingDate: 2021-01-05T09:54:08+00:00
+              examples:
+                example-1:
+                  description: Check multiple EORI Numbers example
+                  value:
+                  - eori: GB123456789133
+                    valid: true
+                    companyDetails:
+                      traderName: Aviationstr
+                      address:
+                        streetAndNumber: 141B Halsey Place
+                        cityName: Huddersfield
+                        postcode: HD98 2LI
+                    processingDate: 2021-01-05T09:54:08+00:00
+                  - eori: GB123456729136
+                    valid: true
+                    processingDate: 2021-01-05T09:54:08+00:00
+                  - eori: GB8392848394939
+                    valid: false
+                    processingDate: 2021-01-05T09:54:08+00:00
+        '400':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Error1'
+                - description: Invalid request
+                  example:
+                    code: INVALID_REQUEST
+                    message: Invalid eori - eori parameters should be between 12 or 15 digits
+              example:
+                code: INVALID_REQUEST
+                message: Invalid eori - eori parameters should be between 12 or 15 digits
+        '500':
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Error1'
+                - description: Internal server error
+                  example:
+                    code: INTERNAL_SERVER_ERROR
+                    message: Unknown error
+              example:
+                code: INTERNAL_SERVER_ERROR
+                message: Unknown error
+      deprecated: false
+components:
+  schemas:
+    errorResponse:
+      title: errorResponse
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+    Address:
+      title: Address
+      required:
+      - streetAndNumber
+      - cityName
+      - postcode
+      type: object
+      properties:
+        streetAndNumber:
+          type: string
+        cityName:
+          type: string
+        postcode:
+          type: string
+      example:
+        streetAndNumber: 141B Halsey Place
+        cityName: Huddersfield
+        postcode: HD98 2LI
+    CompanyDetails:
+      title: CompanyDetails
+      required:
+      - traderName
+      - address
+      type: object
+      properties:
+        traderName:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+      example:
+        traderName: Aviationstr
+        address:
+          streetAndNumber: 141B Halsey Place
+          cityName: Huddersfield
+          postcode: HD98 2LI
+    CustomsEoriLookupCheckMultipleEoriresponse:
+      title: CustomsEoriLookupCheckMultipleEoriresponse
+      required:
+      - eori
+      - valid
+      - processingDate
+      type: object
+      properties:
+        eori:
+          type: string
+        valid:
+          type: boolean
+        companyDetails:
+          $ref: '#/components/schemas/CompanyDetails'
+        processingDate:
+          type: string
+      example:
+        eori: GB123456789133
+        valid: true
+        companyDetails:
+          traderName: Aviationstr
+          address:
+            streetAndNumber: 141B Halsey Place
+            cityName: Huddersfield
+            postcode: HD98 2LI
+        processingDate: 2021-01-05T09:54:08+00:00
+    Error1:
+      title: Error1
+      required:
+      - message
+      - code
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    GBXIEORICheckerService:
+      title: GBXIEORICheckerService
+      required:
+      - eoris
+      type: object
+      properties:
+        eoris:
+          maxItems: 10
+          minItems: 1
+          type: array
+          items:
+            maxLength: 17
+            minLength: 14
+            type: string
+          description: The unique identifier, also known as the eori number
+      description: EIS GB & XI EORI Checker Request Service  v0.01
+tags:
+- name: customs
+  description: ''
