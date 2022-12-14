@@ -1,38 +1,57 @@
-import sbt.Keys._
-import sbt.{Resolver, _}
-import uk.gov.hmrc.DefaultBuildSettings.targetJvm
-import uk.gov.hmrc.gitstamp.GitStampPlugin._
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+import sbt.Keys.{parallelExecution, _}
+import sbt._
+import scoverage.ScoverageKeys
+import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
+import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
-name:= "check-eori-number-api"
+val name = "check-eori-number-api"
 
 PlayKeys.playDefaultPort := 8353
 
-targetJvm := "jvm-1.8"
+val scoverageExcludePatterns = List("<empty>",
+  "Reverse.*",
+  "uk.gov.hmrc.*",
+  "prod.*",
+  "app.Routes.*",
+  "config",
+  "testOnlyDoNotUseInAppConf",
+  "repositories.MongoErrorLogger",
+  "controllers.AgentDelegateAuthorisationController")
 
-lazy val microservice = (project in file("."))
-  .enablePlugins(PlayScala, SbtDistributablesPlugin)
-  .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
+lazy val scoverageSettings = Seq(
+  ScoverageKeys.coverageExcludedPackages := scoverageExcludePatterns.mkString("", ";", ""),
+  ScoverageKeys.coverageMinimumStmtTotal := 80,
+  ScoverageKeys.coverageFailOnMinimum := true,
+  ScoverageKeys.coverageHighlighting := true
+)
+
+lazy val plugins: Seq[Plugins] = Seq(PlayScala, SbtDistributablesPlugin)
+lazy val playSettings: Seq[Setting[_]] = Seq.empty
+
+lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
+  Compile / packageDoc / publishArtifact := false,
+  Compile / packageSrc / publishArtifact := false
+)
+
+lazy val microservice = Project(name, file("."))
+  .enablePlugins(plugins: _*)
   .settings(
-    majorVersion := 0,
-    scalaVersion := "2.12.13",
-    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-    commonSettings,
-    scoverageSettings
+    playSettings,
+    majorVersion := 1,
+    scalaSettings,
+    scalaVersion := "2.13.8",
+    scoverageSettings,
+    publishingSettings,
+    defaultSettings(),
+    PlayKeys.playDefaultPort := 9002,
+    libraryDependencies ++= AppDependencies.all,
+    Test / parallelExecution := false,
+    Test / fork := false,
+    retrieveManaged := true
+  ).settings(
+  scalacOptions ++= Seq(
+    "-language:postfixOps"
   )
-  .settings(publishingSettings: _*)
-  .settings(resolvers += Resolver.jcenterRepo)
-  .settings(scalacOptions += "-P:silencer:pathFilters=routes")
-  .settings(scalacOptions += "-P:silencer:globalFilters=Unused import")
-
-lazy val commonSettings: Seq[Setting[_]] = publishingSettings ++ gitStampSettings
-
-lazy val scoverageSettings: Seq[Setting[_]] = Seq(
-  coverageExcludedPackages := "<empty>;.*(Reverse|Routes).*;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;uk.gov.hmrc.BuildInfo;views.*;uk.gov.hmrc.apinotificationpull.config.*",
-  coverageMinimumStmtTotal := 96,
-  coverageFailOnMinimum := true,
-  coverageHighlighting := true,
-  Test / parallelExecution := false
 )
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
