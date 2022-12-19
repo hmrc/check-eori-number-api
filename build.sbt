@@ -37,7 +37,7 @@ lazy val microservice = Project(name, file("."))
   .enablePlugins(plugins: _*)
   .settings(
     playSettings,
-    majorVersion := 0,
+    majorVersion := 1,
     scalaSettings,
     scalaVersion := "2.13.8",
     scoverageSettings,
