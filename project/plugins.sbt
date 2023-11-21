@@ -8,4 +8,5 @@ addSbtPlugin("net.virtual-void"  % "sbt-dependency-graph"   % "0.10.0-RC1")
 addSbtPlugin("org.scoverage"     %  "sbt-scoverage"         % "1.9.3")
 addSbtPlugin("org.scalastyle"    %% "scalastyle-sbt-plugin" % "1.0.0")
 addSbtPlugin("uk.gov.hmrc"       %  "sbt-auto-build"        % "3.9.0")
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
