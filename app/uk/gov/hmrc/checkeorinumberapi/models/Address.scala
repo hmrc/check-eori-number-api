@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OFormat}
 case class Address(
   streetAndNumber: String,
   cityName: String,
-  postcode: String,
+  postcode: String
 )
 
 object Address {
