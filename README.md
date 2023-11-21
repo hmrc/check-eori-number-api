@@ -2,7 +2,6 @@
 # check-eori-number-api
 
 This microservice provides an API interface to the [Check Eori Number](https://github.com/hmrc/check-eori-number) microservice to provide users with a way to:
-
 * check if an EORI number beginning with GB (issued by the UK) is valid.
 * view the name and address of the business that the EORI number is registered to (if the business agreed to share this information).
 
@@ -24,8 +23,8 @@ Getting started with Check EORI number API
 
        Run the services against the current versions in dev, stop the CHEN_FRONTEND service and  start manually
        
-           sm --start CHEN_ALL -r 
-           sm --stop CHEN_API
+           sm2 --start CHEN_ALL 
+           sm2 --stop CHEN_API
            cd check-eori-number-api
            sbt run
 
