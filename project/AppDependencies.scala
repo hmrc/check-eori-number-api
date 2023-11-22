@@ -3,7 +3,7 @@ import sbt.Keys.scalacOptions
 import sbt._
 
 object AppDependencies {
-  val bootstrapVersion = "7.23.0"
+  val bootstrapVersion = "8.0.0"
   val compile = Seq(
     "uk.gov.hmrc" %% "bootstrap-backend-play-28" % bootstrapVersion
   )
