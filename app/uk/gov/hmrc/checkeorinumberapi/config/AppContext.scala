@@ -21,12 +21,12 @@ import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class AppContext @Inject()(configuration: Configuration, servicesConfig: ServicesConfig) {
+class AppContext @Inject() (configuration: Configuration, servicesConfig: ServicesConfig) {
 
   private lazy val chenUrl: String = servicesConfig.getConfString("check-eori-number.url", "")
-  lazy val eisUrl: String = s"${servicesConfig.baseUrl("check-eori-number")}/$chenUrl"
+  lazy val eisUrl: String          = s"${servicesConfig.baseUrl("check-eori-number")}/$chenUrl"
 
-  lazy val apiContext: String = servicesConfig.getString("api.context")
+  lazy val apiContext: String          = servicesConfig.getString("api.context")
   lazy val allowXiEoriNumbers: Boolean = servicesConfig.getBoolean("allowXiEoriNumbers")
-  lazy val eisApiLimit: Int = servicesConfig.getInt("eisApiLimit")
+  lazy val eisApiLimit: Int            = servicesConfig.getInt("eisApiLimit")
 }

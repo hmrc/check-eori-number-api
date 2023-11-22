@@ -25,7 +25,7 @@ import views.txt
 import javax.inject.Inject
 import scala.concurrent.Future
 
-class ApiDocumentationController @Inject()(
+class ApiDocumentationController @Inject() (
   httpErrorHandler: HttpErrorHandler,
   meta: AssetsMetadata,
   appContext: AppContext
@@ -33,10 +33,12 @@ class ApiDocumentationController @Inject()(
 
   def definition(): Action[AnyContent] = Action.async {
     Future.successful(
-      Ok(txt.definition(
+      Ok(
+        txt.definition(
           appContext.apiContext
         )
-      ).as(ContentTypes.withCharset(MimeTypes.JSON)(Codec.utf_8)))
+      ).as(ContentTypes.withCharset(MimeTypes.JSON)(Codec.utf_8))
+    )
   }
 
   def conf(version: String, file: String): Action[AnyContent] =
