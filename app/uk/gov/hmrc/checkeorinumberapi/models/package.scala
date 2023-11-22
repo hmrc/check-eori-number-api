@@ -20,8 +20,8 @@ import java.time.ZonedDateTime
 
 package object models {
 
-  type TraderName = String
-  type EoriNumber = String
+  type TraderName     = String
+  type EoriNumber     = String
   type ProcessingDate = ZonedDateTime
 
 }

@@ -32,15 +32,15 @@ trait CheckEoriNumberConnector {
 
   def checkEoriNumbers(
     check: CheckMultipleEoriNumbersRequest
-  )(
-    implicit hc: HeaderCarrier,
+  )(implicit
+    hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[Option[List[CheckResponse]]]
 
 }
 
 @Singleton
-class CheckEoriNumberConnectorImpl @Inject()(
+class CheckEoriNumberConnectorImpl @Inject() (
   http: HttpClient,
   environment: Environment,
   configuration: Configuration,
@@ -49,12 +49,13 @@ class CheckEoriNumberConnectorImpl @Inject()(
 
   def checkEoriNumbers(
     check: CheckMultipleEoriNumbersRequest
-  )(
-    implicit hc: HeaderCarrier,
+  )(implicit
+    hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[Option[List[CheckResponse]]] =
     http.POST[CheckMultipleEoriNumbersRequest, List[CheckResponse]](
-      url = s"${appContext.eisUrl}/check-multiple-eori", body = check
+      url = s"${appContext.eisUrl}/check-multiple-eori",
+      body = check
     ).map(Some(_))
 
 }

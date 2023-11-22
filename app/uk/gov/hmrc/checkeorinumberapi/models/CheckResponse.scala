@@ -21,7 +21,7 @@ import java.time.{ZoneId, ZonedDateTime}
 
 import play.api.libs.json._
 
-case class CheckResponse (
+case class CheckResponse(
   eori: EoriNumber,
   valid: Boolean,
   companyDetails: Option[CompanyDetails],
@@ -33,7 +33,6 @@ object CheckResponse {
     override def writes(o: ProcessingDate): JsValue =
       JsString(o.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx")))
   }
-  implicit val checkResponseFormat: Format[CheckResponse] = {
+  implicit val checkResponseFormat: Format[CheckResponse] =
     Json.format[CheckResponse]
-  }
 }
