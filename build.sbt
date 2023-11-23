@@ -8,6 +8,10 @@ val name = "check-eori-number-api"
 
 PlayKeys.playDefaultPort := 8353
 
+scalacOptions += "-Wconf:src=html/.*:s"
+scalacOptions += "-Wconf:src=routes/.*:s"
+scalacOptions += "-Wconf:src=txt/.*:s"
+
 val scoverageExcludePatterns = List("<empty>",
   "Reverse.*",
   "uk.gov.hmrc.*",
@@ -41,7 +45,6 @@ lazy val microservice = Project(name, file("."))
     scalaSettings,
     scalaVersion := "2.13.8",
     scoverageSettings,
-    publishingSettings,
     defaultSettings(),
     PlayKeys.playDefaultPort := 9002,
     libraryDependencies ++= AppDependencies.all,

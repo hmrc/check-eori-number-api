@@ -27,11 +27,12 @@ import uk.gov.hmrc.checkeorinumberapi.models._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton()
-class EoriController @Inject()(
+class EoriController @Inject() (
   connector: CheckEoriNumberConnector,
   cc: ControllerComponents,
   appContext: AppContext
-)(implicit ec: ExecutionContext) extends BackendController(cc) {
+)(implicit ec: ExecutionContext)
+    extends BackendController(cc) {
 
   private val ukEoriRegex: String = "^(GB|XI)[0-9]{12,15}$"
   private val xiEoriRegex: String = "^XI[0-9]{12,15}$"
@@ -59,7 +60,7 @@ class EoriController @Inject()(
                   "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
               )
             )
-          case en if en.exists(x => x.matches(xiEoriRegex)) && !appContext.allowXiEoriNumbers=>
+          case en if en.exists(x => x.matches(xiEoriRegex)) && !appContext.allowXiEoriNumbers =>
             Future.successful(
               BadRequest(
                 "Invalid payload - one or more EORI numbers begin with XI." +
