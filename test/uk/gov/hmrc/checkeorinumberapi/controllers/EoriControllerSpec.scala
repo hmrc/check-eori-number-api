@@ -33,13 +33,14 @@ class EoriControllerSpec extends BaseSpec {
 
     override def checkEoriNumbers(
       check: CheckMultipleEoriNumbersRequest
-    )(
-      implicit hc: HeaderCarrier,
+    )(implicit
+      hc: HeaderCarrier,
       ec: ExecutionContext
     ): Future[Option[List[CheckResponse]]] = check.eoris match {
-      case `eoriNumber`::Nil  => Future.successful(Some(List(checkResponse)))
-      case `invalidEoriNumber`::Nil  => Future.successful(Some(List(invalidCheckResponse)))
-      case `eoriNumber`::`invalidEoriNumber`::Nil  => Future.successful(Some(List(checkResponse, invalidCheckResponse)))
+      case `eoriNumber` :: Nil        => Future.successful(Some(List(checkResponse)))
+      case `invalidEoriNumber` :: Nil => Future.successful(Some(List(invalidCheckResponse)))
+      case `eoriNumber` :: `invalidEoriNumber` :: Nil =>
+        Future.successful(Some(List(checkResponse, invalidCheckResponse)))
       case _ => throw new RuntimeException("Check eori number request is invalid")
     }
   }
@@ -87,7 +88,7 @@ class EoriControllerSpec extends BaseSpec {
       status(result) shouldBe Status.BAD_REQUEST
       contentAsString(result) should include(
         "Invalid payload - one or more EORI numbers are not valid, " +
-        "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
+          "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
       )
     }
 
@@ -96,8 +97,8 @@ class EoriControllerSpec extends BaseSpec {
       status(result) shouldBe Status.BAD_REQUEST
       contentAsString(result) should include(
         "Invalid payload - one or more EORI numbers begin with XI." +
-        " To check an EORI number that starts with XI, " +
-        "use the EORI checker service on the European Commission website"
+          " To check an EORI number that starts with XI, " +
+          "use the EORI checker service on the European Commission website"
       )
     }
 

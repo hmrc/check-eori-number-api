@@ -38,14 +38,13 @@ trait BaseSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   implicit val executionContext = app.injector.instanceOf[ExecutionContext]
   implicit val headerCarrier    = HeaderCarrier()
 
-
-  val eoriNumber: EoriNumber = "GB123456789000"
+  val eoriNumber: EoriNumber        = "GB123456789000"
   val invalidEoriNumber: EoriNumber = "GB999999999999"
-  val checkResponse = CheckResponse(eoriNumber, true, None)
-  val invalidCheckResponse = CheckResponse(invalidEoriNumber, false, None)
+  val checkResponse                 = CheckResponse(eoriNumber, true, None)
+  val invalidCheckResponse          = CheckResponse(invalidEoriNumber, false, None)
 
-  val notAEoriNumber = List("AA123456789")
-  val xiEoriNumbers = List("XI123456789123", "XI3219876543210")
+  val notAEoriNumber       = List("AA123456789")
+  val xiEoriNumbers        = List("XI123456789123", "XI3219876543210")
   val validAndInvalidEoris = List(eoriNumber, invalidEoriNumber)
   val eorisExceedingLimit = List(
     eoriNumber,
@@ -60,6 +59,5 @@ trait BaseSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
     invalidEoriNumber,
     invalidEoriNumber
   )
-
 
 }
