@@ -2,7 +2,8 @@ import sbt.Keys.{parallelExecution, _}
 import sbt._
 import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
+
+scalafmtOnCompile := true
 
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageExcludedPackages := scoverageExcludePatterns.mkString("", ";", ""),
