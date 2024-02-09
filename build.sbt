@@ -29,7 +29,7 @@ lazy val microservice = Project(name, file("."))
     playSettings,
     majorVersion := 1,
     scalaSettings,
-    scalaVersion := "2.13.8",
+    scalaVersion := "2.13.12",
     scoverageSettings,
     defaultSettings(),
     PlayKeys.playDefaultPort := 9002,
@@ -41,6 +41,10 @@ lazy val microservice = Project(name, file("."))
     scalacOptions ++= Seq(
       "-language:postfixOps"
     )
+  )
+  .settings(
+    // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
+    libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always)
   )
 val name = "check-eori-number-api"
 val scoverageExcludePatterns = List(
