@@ -39,7 +39,7 @@ Getting started with Check EORI number API
 
 Unit tests
 ----------
-Run `sbt test` on the terminal to run the unit tests.
+Run `sbt test it/test` on the terminal to run the unit and integration tests.
 
 Acronyms
 ---
