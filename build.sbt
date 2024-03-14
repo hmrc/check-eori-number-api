@@ -47,13 +47,12 @@ val name = "check-eori-number-api"
 val scoverageExcludePatterns = List(
   "<empty>",
   "Reverse.*",
-  "uk.gov.hmrc.*",
   "prod.*",
   "app.Routes.*",
+  ".*Routes.*",
   "config",
-  "testOnlyDoNotUseInAppConf",
-  "repositories.MongoErrorLogger",
-  "controllers.AgentDelegateAuthorisationController"
+  "uk.gov.hmrc.checkeorinumberapi.controllers.ApiDocumentationController",
+  ".*views.*"
 )
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"

@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EoriControllerSpec extends BaseSpec {
 
-  val mockConnector = new CheckEoriNumberConnector {
+  val mockConnector: CheckEoriNumberConnector = new CheckEoriNumberConnector {
 
     override def checkEoriNumbers(
       check: CheckMultipleEoriNumbersRequest
