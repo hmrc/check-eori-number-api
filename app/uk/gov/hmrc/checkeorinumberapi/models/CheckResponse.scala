@@ -33,6 +33,6 @@ object CheckResponse {
     override def writes(o: ProcessingDate): JsValue =
       JsString(o.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxxx")))
   }
-  implicit val checkResponseFormat: Format[CheckResponse] =
+  implicit val checkResponseFormat: Format[CheckResponse]   =
     Json.format[CheckResponse]
 }

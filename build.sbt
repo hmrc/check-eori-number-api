@@ -1,9 +1,12 @@
-import sbt.Keys.{parallelExecution, _}
-import sbt._
+import sbt.Keys.{parallelExecution, *}
+import sbt.*
 import scoverage.ScoverageKeys
+import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
 
 scalafmtOnCompile := true
+ThisBuild / majorVersion := 1
+ThisBuild / scalaVersion := "2.13.13"
 
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageExcludedPackages := scoverageExcludePatterns.mkString("", ";", ""),
@@ -27,9 +30,7 @@ lazy val microservice = Project(name, file("."))
   .enablePlugins(plugins: _*)
   .settings(
     playSettings,
-    majorVersion := 1,
     scalaSettings,
-    scalaVersion := "2.13.12",
     scoverageSettings,
     defaultSettings(),
     PlayKeys.playDefaultPort := 9002,
@@ -42,22 +43,24 @@ lazy val microservice = Project(name, file("."))
       "-language:postfixOps"
     )
   )
-  .settings(
-    // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
-    libraryDependencySchemes ++= Seq("org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always)
-  )
+
 val name = "check-eori-number-api"
 val scoverageExcludePatterns = List(
   "<empty>",
   "Reverse.*",
-  "uk.gov.hmrc.*",
   "prod.*",
   "app.Routes.*",
+  ".*Routes.*",
   "config",
-  "testOnlyDoNotUseInAppConf",
-  "repositories.MongoErrorLogger",
-  "controllers.AgentDelegateAuthorisationController"
+  "uk.gov.hmrc.checkeorinumberapi.controllers.ApiDocumentationController",
+  ".*views.*"
 )
+
+lazy val it = project
+  .enablePlugins(PlayScala)
+  .dependsOn(microservice % "test->test") // the "test->test" allows reusing test code and test dependencies
+  .settings(DefaultBuildSettings.itSettings())
+  .settings(libraryDependencies ++= AppDependencies.test)
 
 scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 

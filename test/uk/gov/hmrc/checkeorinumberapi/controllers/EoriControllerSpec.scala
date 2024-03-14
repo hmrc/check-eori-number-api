@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EoriControllerSpec extends BaseSpec {
 
-  val mockConnector = new CheckEoriNumberConnector {
+  val mockConnector: CheckEoriNumberConnector = new CheckEoriNumberConnector {
 
     override def checkEoriNumbers(
       check: CheckMultipleEoriNumbersRequest
@@ -37,11 +37,11 @@ class EoriControllerSpec extends BaseSpec {
       hc: HeaderCarrier,
       ec: ExecutionContext
     ): Future[Option[List[CheckResponse]]] = check.eoris match {
-      case `eoriNumber` :: Nil        => Future.successful(Some(List(checkResponse)))
-      case `invalidEoriNumber` :: Nil => Future.successful(Some(List(invalidCheckResponse)))
+      case `eoriNumber` :: Nil                        => Future.successful(Some(List(checkResponse)))
+      case `invalidEoriNumber` :: Nil                 => Future.successful(Some(List(invalidCheckResponse)))
       case `eoriNumber` :: `invalidEoriNumber` :: Nil =>
         Future.successful(Some(List(checkResponse, invalidCheckResponse)))
-      case _ => throw new RuntimeException("Check eori number request is invalid")
+      case _                                          => throw new RuntimeException("Check eori number request is invalid")
     }
   }
 

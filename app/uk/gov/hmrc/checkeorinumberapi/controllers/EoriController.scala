@@ -41,19 +41,19 @@ class EoriController @Inject() (
     Action.async(parse.json) { implicit request =>
       withJsonBody[CheckMultipleEoriNumbersRequest](cmr => {
         cmr.eoris match {
-          case Nil =>
+          case Nil                                                                            =>
             Future.successful(
               BadRequest(
                 "Invalid payload - one or more EORI numbers are required in your body"
               )
             )
-          case en if en.size > appContext.eisApiLimit =>
+          case en if en.size > appContext.eisApiLimit                                         =>
             Future.successful(
               BadRequest(
                 s"Invalid payload - you have exceeded the maximum of ${appContext.eisApiLimit} EORI numbers"
               )
             )
-          case en if !en.forall(_.matches(ukEoriRegex)) =>
+          case en if !en.forall(_.matches(ukEoriRegex))                                       =>
             Future.successful(
               BadRequest(
                 "Invalid payload - one or more EORI numbers are not valid, " +
@@ -68,7 +68,7 @@ class EoriController @Inject() (
                   "use the EORI checker service on the European Commission website"
               )
             )
-          case _ =>
+          case _                                                                              =>
             connector.checkEoriNumbers(cmr).map { checkResponse =>
               Ok(Json.toJson(checkResponse))
             }

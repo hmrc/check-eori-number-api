@@ -19,6 +19,7 @@ package uk.gov.hmrc.checkeorinumberapi.utils
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.checkeorinumberapi.config.AppContext
@@ -30,23 +31,23 @@ import scala.concurrent.ExecutionContext
 
 trait BaseSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
-  val fakeRequest               = FakeRequest("GET", "/")
-  val env                       = Environment.simple()
-  val configuration             = Configuration.load(env)
-  val serviceConfig             = new ServicesConfig(configuration)
-  val appContext                = new AppContext(configuration, serviceConfig)
-  implicit val executionContext = app.injector.instanceOf[ExecutionContext]
-  implicit val headerCarrier    = HeaderCarrier()
+  val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/")
+  val env: Environment                                 = Environment.simple()
+  val configuration: Configuration                     = Configuration.load(env)
+  val serviceConfig                                    = new ServicesConfig(configuration)
+  val appContext                                       = new AppContext(configuration, serviceConfig)
+  implicit val executionContext: ExecutionContext      = app.injector.instanceOf[ExecutionContext]
+  implicit val headerCarrier: HeaderCarrier            = HeaderCarrier()
 
-  val eoriNumber: EoriNumber        = "GB123456789000"
-  val invalidEoriNumber: EoriNumber = "GB999999999999"
-  val checkResponse                 = CheckResponse(eoriNumber, true, None)
-  val invalidCheckResponse          = CheckResponse(invalidEoriNumber, false, None)
+  val eoriNumber: EoriNumber              = "GB123456789000"
+  val invalidEoriNumber: EoriNumber       = "GB999999999999"
+  val checkResponse: CheckResponse        = CheckResponse(eoriNumber, valid = true, None)
+  val invalidCheckResponse: CheckResponse = CheckResponse(invalidEoriNumber, valid = false, None)
 
-  val notAEoriNumber       = List("AA123456789")
-  val xiEoriNumbers        = List("XI123456789123", "XI3219876543210")
-  val validAndInvalidEoris = List(eoriNumber, invalidEoriNumber)
-  val eorisExceedingLimit = List(
+  val notAEoriNumber: List[EoriNumber]       = List("AA123456789")
+  val xiEoriNumbers: List[EoriNumber]        = List("XI123456789123", "XI3219876543210")
+  val validAndInvalidEoris: List[EoriNumber] = List(eoriNumber, invalidEoriNumber)
+  val eorisExceedingLimit: List[EoriNumber]  = List(
     eoriNumber,
     eoriNumber,
     eoriNumber,
