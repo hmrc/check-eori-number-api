@@ -47,7 +47,7 @@ trait BaseSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   val notAEoriNumber: List[EoriNumber]       = List("AA123456789")
   val xiEoriNumbers: List[EoriNumber]        = List("XI123456789123", "XI3219876543210")
   val validAndInvalidEoris: List[EoriNumber] = List(eoriNumber, invalidEoriNumber)
-  val eorisExceedingLimit: List[EoriNumber] = List(
+  val eorisExceedingLimit: List[EoriNumber]  = List(
     eoriNumber,
     eoriNumber,
     eoriNumber,
