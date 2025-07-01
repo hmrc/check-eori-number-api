@@ -1,6 +1,5 @@
 @(apiContext: String)
 {
-  "scopes":[],
   "api": {
     "name": "Check an EORI Number",
     "description": "Allows for retrieval of EORI numbers",
