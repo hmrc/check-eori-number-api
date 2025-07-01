@@ -44,28 +44,48 @@ class EoriController @Inject() (
           case Nil                                                                            =>
             Future.successful(
               BadRequest(
-                "Invalid payload - one or more EORI numbers are required in your body"
+                Json.toJson(
+                  ErrorResponse(
+                    "INVALID_REQUEST",
+                    "Invalid payload - one or more EORI numbers are required in your body"
+                  )
+                )
               )
             )
           case en if en.size > appContext.eisApiLimit                                         =>
             Future.successful(
               BadRequest(
-                s"Invalid payload - you have exceeded the maximum of ${appContext.eisApiLimit} EORI numbers"
+                Json.toJson(
+                  ErrorResponse(
+                    "INVALID_REQUEST",
+                    s"Invalid payload - you have exceeded the maximum of ${appContext.eisApiLimit} EORI numbers"
+                  )
+                )
               )
             )
           case en if !en.forall(_.matches(ukEoriRegex))                                       =>
             Future.successful(
               BadRequest(
-                "Invalid payload - one or more EORI numbers are not valid, " +
-                  "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
+                Json.toJson(
+                  ErrorResponse(
+                    "INVALID_REQUEST",
+                    "Invalid payload - one or more EORI numbers are not valid, " +
+                      "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
+                  )
+                )
               )
             )
           case en if en.exists(x => x.matches(xiEoriRegex)) && !appContext.allowXiEoriNumbers =>
             Future.successful(
               BadRequest(
-                "Invalid payload - one or more EORI numbers begin with XI." +
-                  " To check an EORI number that starts with XI, " +
-                  "use the EORI checker service on the European Commission website"
+                Json.toJson(
+                  ErrorResponse(
+                    "INVALID_REQUEST",
+                    "Invalid payload - one or more EORI numbers begin with XI." +
+                      " To check an EORI number that starts with XI, " +
+                      "use the EORI checker service on the European Commission website"
+                  )
+                )
               )
             )
           case _                                                                              =>
