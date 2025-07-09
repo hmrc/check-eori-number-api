@@ -70,7 +70,7 @@ class EoriController @Inject() (
                   ErrorResponse(
                     "INVALID_REQUEST",
                     "Invalid payload - one or more EORI numbers are not valid, " +
-                      "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
+                      "ensure all of your EORI numbers match ^GB[0-9]{12,15}$"
                   )
                 )
               )

@@ -88,7 +88,7 @@ class EoriControllerSpec extends BaseSpec {
       status(result) shouldBe Status.BAD_REQUEST
       contentAsString(result) should include(
         "Invalid payload - one or more EORI numbers are not valid, " +
-          "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
+          "ensure all of your EORI numbers match ^GB[0-9]{12,15}$"
       )
     }
 
