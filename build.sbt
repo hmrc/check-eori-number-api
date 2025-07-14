@@ -6,7 +6,7 @@ import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
 
 scalafmtOnCompile := true
 ThisBuild / majorVersion := 1
-ThisBuild / scalaVersion := "2.13.13"
+ThisBuild / scalaVersion := "2.13.16"
 
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageExcludedPackages := scoverageExcludePatterns.mkString("", ";", ""),
