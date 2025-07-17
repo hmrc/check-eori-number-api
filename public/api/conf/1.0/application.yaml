@@ -131,21 +131,6 @@ paths:
               example:
                 code: INVALID_REQUEST
                 message: Invalid payload - one or more EORI numbers begin with XI. To check an EORI number that starts with XI, use the EORI checker service on the European Commission website
-          '400':
-          description: ''
-          headers: {}
-          content:
-            application/json:
-              schema:
-                allOf:
-                - $ref: '#/components/schemas/Error1'
-                - description: Invalid request
-                  example:
-                    code: INVALID_REQUEST
-                    message: Invalid payload - one or more EORI numbers begin with XI. To check an EORI number that starts with XI, use the EORI checker service on the European Commission website
-              example:
-                code: INVALID_REQUEST
-                message: Invalid payload - one or more EORI numbers begin with XI. To check an EORI number that starts with XI, use the EORI checker service on the European Commission website
         '500':
           description: ''
           headers: {}
