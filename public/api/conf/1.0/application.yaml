@@ -17,6 +17,13 @@ info:
     * 400 to 499 if it failed because of a client error by your application
     * 500 to 599 if it failed because of an error on our server
 
+    # Examples
+    The error response will include one of the following messages.
+    * Invalid payload - one or more EORI numbers are required in your body
+    * Invalid payload - you have exceeded the maximum of 10 EORI numbers
+    * Invalid payload - one or more EORI numbers are not valid, ensure all of your EORI numbers match ^(GB)[0-9]{12,15}$"
+    * Invalid payload - one or more EORI numbers begin with XI. To check an EORI number that starts with XI, use the EORI checker service on the European Commission website
+
     Errors specific to each API are shown in the Endpoints section, under Response.
     See our [reference guide](/api-documentation/docs/reference-guide#errors) for more on errors.
 
