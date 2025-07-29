@@ -18,7 +18,7 @@ info:
     * 500 to 599 if it failed because of an error on our server
 
     # Examples
-    The error response will include one of the following messages.
+    The http 400 error response will include one of the following messages.
     * Invalid payload - one or more EORI numbers are required in your body
     * Invalid payload - you have exceeded the maximum of 10 EORI numbers
     * Invalid payload - one or more EORI numbers are not valid, ensure all of your EORI numbers match ^(GB)[0-9]{12,15}$"
