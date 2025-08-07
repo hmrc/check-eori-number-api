@@ -251,6 +251,3 @@ components:
             type: string
           description: The unique identifier, also known as the eori number
       description: EIS GB & XI EORI Checker Request Service  v0.01
-tags:
-- name: customs
-  description: ''
