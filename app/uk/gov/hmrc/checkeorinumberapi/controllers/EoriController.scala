@@ -18,7 +18,6 @@ package uk.gov.hmrc.checkeorinumberapi.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
-import play.api.Logging
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.checkeorinumberapi.config.AppContext
 import uk.gov.hmrc.checkeorinumberapi.connectors.CheckEoriNumberConnector
@@ -33,72 +32,40 @@ class EoriController @Inject() (
   cc: ControllerComponents,
   appContext: AppContext
 )(implicit ec: ExecutionContext)
-    extends BackendController(cc)
-    with Logging {
+    extends BackendController(cc) {
 
   private val ukEoriRegex: String = "^(GB|XI)[0-9]{12,15}$"
   private val xiEoriRegex: String = "^XI[0-9]{12,15}$"
 
   def checkMultipleEoris: Action[JsValue] = {
     Action.async(parse.json) { implicit request =>
-      val requestBodyJson    = Json.toJson(request.body)
-      val requestHeadersJson = Json.obj(
-        "headers" -> Json.toJson(request.headers.headers)
-      )
-
-      val fullRequestJson = Json.obj(
-        "body"    -> requestBodyJson,
-        "headers" -> requestHeadersJson
-      )
-
-      logger.warn(s"Received request: ${Json.prettyPrint(fullRequestJson)}")
       withJsonBody[CheckMultipleEoriNumbersRequest](cmr => {
         cmr.eoris match {
           case Nil                                                                            =>
             Future.successful(
               BadRequest(
-                Json.toJson(
-                  ErrorResponse(
-                    "INVALID_REQUEST",
-                    "Invalid payload - one or more EORI numbers are required in your body"
-                  )
-                )
+                "Invalid payload - one or more EORI numbers are required in your body"
               )
             )
           case en if en.size > appContext.eisApiLimit                                         =>
             Future.successful(
               BadRequest(
-                Json.toJson(
-                  ErrorResponse(
-                    "INVALID_REQUEST",
-                    s"Invalid payload - you have exceeded the maximum of ${appContext.eisApiLimit} EORI numbers"
-                  )
-                )
+                s"Invalid payload - you have exceeded the maximum of ${appContext.eisApiLimit} EORI numbers"
               )
             )
           case en if !en.forall(_.matches(ukEoriRegex))                                       =>
             Future.successful(
               BadRequest(
-                Json.toJson(
-                  ErrorResponse(
-                    "INVALID_REQUEST",
-                    "Invalid payload - one or more EORI numbers are not valid, " +
-                      "ensure all of your EORI numbers match ^GB[0-9]{12,15}$"
-                  )
-                )
+                "Invalid payload - one or more EORI numbers are not valid, " +
+                  "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
               )
             )
           case en if en.exists(x => x.matches(xiEoriRegex)) && !appContext.allowXiEoriNumbers =>
             Future.successful(
               BadRequest(
-                Json.toJson(
-                  ErrorResponse(
-                    "INVALID_REQUEST",
-                    "Invalid payload - one or more EORI numbers begin with XI." +
-                      " To check an EORI number that starts with XI, " +
-                      "use the EORI checker service on the European Commission website"
-                  )
-                )
+                "Invalid payload - one or more EORI numbers begin with XI." +
+                  " To check an EORI number that starts with XI, " +
+                  "use the EORI checker service on the European Commission website"
               )
             )
           case _                                                                              =>
