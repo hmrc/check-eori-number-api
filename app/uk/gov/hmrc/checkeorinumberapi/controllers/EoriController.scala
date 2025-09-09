@@ -18,6 +18,7 @@ package uk.gov.hmrc.checkeorinumberapi.controllers
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
+import play.api.Logging
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.checkeorinumberapi.config.AppContext
 import uk.gov.hmrc.checkeorinumberapi.connectors.CheckEoriNumberConnector
@@ -32,13 +33,25 @@ class EoriController @Inject() (
   cc: ControllerComponents,
   appContext: AppContext
 )(implicit ec: ExecutionContext)
-    extends BackendController(cc) {
+    extends BackendController(cc)
+    with Logging {
 
   private val ukEoriRegex: String = "^(GB|XI)[0-9]{12,15}$"
   private val xiEoriRegex: String = "^XI[0-9]{12,15}$"
 
   def checkMultipleEoris: Action[JsValue] = {
     Action.async(parse.json) { implicit request =>
+      val requestBodyJson    = Json.toJson(request.body)
+      val requestHeadersJson = Json.obj(
+        "headers" -> Json.toJson(request.headers.headers)
+      )
+
+      val fullRequestJson = Json.obj(
+        "body"    -> requestBodyJson,
+        "headers" -> requestHeadersJson
+      )
+
+      logger.warn(s"Received request: ${Json.prettyPrint(fullRequestJson)}")
       withJsonBody[CheckMultipleEoriNumbersRequest](cmr => {
         cmr.eoris match {
           case Nil                                                                            =>
