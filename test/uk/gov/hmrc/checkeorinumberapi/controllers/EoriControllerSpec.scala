@@ -87,7 +87,8 @@ class EoriControllerSpec extends BaseSpec {
       val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris().apply(request(List("AA123456789")))
       status(result) shouldBe Status.BAD_REQUEST
       contentAsString(result) should include(
-        "Invalid payload - one or more EORI numbers are not valid, ensure all of your EORI numbers match ^GB[0-9]{12,15}$"
+        "Invalid payload - one or more EORI numbers are not valid, " +
+          "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
       )
     }
 
