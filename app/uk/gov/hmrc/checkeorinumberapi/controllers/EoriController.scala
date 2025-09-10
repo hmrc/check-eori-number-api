@@ -39,55 +39,50 @@ class EoriController @Inject() (
   private val ukEoriRegex: String = "^(GB|XI)[0-9]{12,15}$"
   private val xiEoriRegex: String = "^XI[0-9]{12,15}$"
 
+  private val blockedIp: String = "138.201.133.202"
+
   def checkMultipleEoris: Action[JsValue] = {
     Action.async(parse.json) { implicit request =>
-      val requestBodyJson    = Json.toJson(request.body)
-      val requestHeadersJson = Json.obj(
-        "headers" -> Json.toJson(request.headers.headers)
-      )
-
-      val fullRequestJson = Json.obj(
-        "body"    -> requestBodyJson,
-        "headers" -> requestHeadersJson
-      )
-
-      logger.warn(s"Received request: ${Json.prettyPrint(fullRequestJson)}")
-      withJsonBody[CheckMultipleEoriNumbersRequest](cmr => {
-        cmr.eoris match {
-          case Nil                                                                            =>
-            Future.successful(
-              BadRequest(
-                "Invalid payload - one or more EORI numbers are required in your body"
+      val trueClientIp = request.headers.get("true-client-ip").getOrElse("Unknown IP")
+      if (trueClientIp.toString() == blockedIp) {
+        Future.successful(Forbidden("Service Unavailable"))
+      } else {
+        withJsonBody[CheckMultipleEoriNumbersRequest](cmr => {
+          cmr.eoris match {
+            case Nil                                                                            =>
+              Future.successful(
+                BadRequest(
+                  "Invalid payload - one or more EORI numbers are required in your body"
+                )
               )
-            )
-          case en if en.size > appContext.eisApiLimit                                         =>
-            Future.successful(
-              BadRequest(
-                s"Invalid payload - you have exceeded the maximum of ${appContext.eisApiLimit} EORI numbers"
+            case en if en.size > appContext.eisApiLimit                                         =>
+              Future.successful(
+                BadRequest(
+                  s"Invalid payload - you have exceeded the maximum of ${appContext.eisApiLimit} EORI numbers"
+                )
               )
-            )
-          case en if !en.forall(_.matches(ukEoriRegex))                                       =>
-            Future.successful(
-              BadRequest(
-                "Invalid payload - one or more EORI numbers are not valid, " +
-                  "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
+            case en if !en.forall(_.matches(ukEoriRegex))                                       =>
+              Future.successful(
+                BadRequest(
+                  "Invalid payload - one or more EORI numbers are not valid, " +
+                    "ensure all of your EORI numbers match ^(GB|XI)[0-9]{12,15}$"
+                )
               )
-            )
-          case en if en.exists(x => x.matches(xiEoriRegex)) && !appContext.allowXiEoriNumbers =>
-            Future.successful(
-              BadRequest(
-                "Invalid payload - one or more EORI numbers begin with XI." +
-                  " To check an EORI number that starts with XI, " +
-                  "use the EORI checker service on the European Commission website"
+            case en if en.exists(x => x.matches(xiEoriRegex)) && !appContext.allowXiEoriNumbers =>
+              Future.successful(
+                BadRequest(
+                  "Invalid payload - one or more EORI numbers begin with XI." +
+                    " To check an EORI number that starts with XI, " +
+                    "use the EORI checker service on the European Commission website"
+                )
               )
-            )
-          case _                                                                              =>
-            connector.checkEoriNumbers(cmr).map { checkResponse =>
-              Ok(Json.toJson(checkResponse))
-            }
-        }
-      })
+            case _                                                                              =>
+              connector.checkEoriNumbers(cmr).map { checkResponse =>
+                Ok(Json.toJson(checkResponse))
+              }
+          }
+        })
+      }
     }
   }
-
 }
