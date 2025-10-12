@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.checkeorinumberapi.models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Json, OFormat, Writes}
 
 case class ErrorResponse(code: String, message: String)
 
 object ErrorResponse {
-  implicit val format: OFormat[ErrorResponse] = Json.format[ErrorResponse]
+  implicit val writes: Writes[ErrorResponse] = Json.writes[ErrorResponse]
 }
