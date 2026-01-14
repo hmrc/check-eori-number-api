@@ -17,13 +17,12 @@
 package uk.gov.hmrc.checkeorinumberapi.connectors
 
 import com.google.inject.ImplementedBy
+
 import javax.inject.{Inject, Singleton}
-import play.api.{Configuration, Environment}
 import uk.gov.hmrc.checkeorinumberapi.config.AppContext
 import uk.gov.hmrc.checkeorinumberapi.models.{CheckMultipleEoriNumbersRequest, CheckResponse}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, StringContextOps}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -42,8 +41,6 @@ trait CheckEoriNumberConnector {
 @Singleton
 class CheckEoriNumberConnectorImpl @Inject() (
   http: HttpClient,
-  environment: Environment,
-  configuration: Configuration,
   appContext: AppContext
 ) extends CheckEoriNumberConnector {
 
@@ -54,7 +51,7 @@ class CheckEoriNumberConnectorImpl @Inject() (
     ec: ExecutionContext
   ): Future[Option[List[CheckResponse]]] =
     http.POST[CheckMultipleEoriNumbersRequest, List[CheckResponse]](
-      url = s"${appContext.eisUrl}/check-multiple-eori",
+      url = url"${appContext.eisUrl}/check-multiple-eori",
       body = check
     ).map(Some(_))
 

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.checkeorinumberapi.controllers
 
 import controllers.{AssetsBuilder, AssetsMetadata}
+import play.api.Environment
 import play.api.http.{ContentTypes, HttpErrorHandler, MimeTypes}
 import play.api.mvc.{Action, AnyContent, Codec}
 import uk.gov.hmrc.checkeorinumberapi.config.AppContext
@@ -28,8 +29,9 @@ import scala.concurrent.Future
 class ApiDocumentationController @Inject() (
   httpErrorHandler: HttpErrorHandler,
   meta: AssetsMetadata,
+  environment: Environment,
   appContext: AppContext
-) extends AssetsBuilder(httpErrorHandler, meta) {
+) extends AssetsBuilder(httpErrorHandler, meta, environment) {
 
   def definition(): Action[AnyContent] = Action.async {
     Future.successful(
