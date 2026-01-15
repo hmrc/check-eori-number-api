@@ -63,12 +63,12 @@ class EoriControllerSpec extends BaseSpec {
     )
 
     "return 200" in {
-      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris().apply(request(validAndInvalidEoris))
+      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris.apply(request(validAndInvalidEoris))
       status(result) shouldBe Status.OK
     }
 
     "return 400 for an empty list" in {
-      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris().apply(request())
+      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris.apply(request())
       status(result) shouldBe Status.BAD_REQUEST
       contentAsString(result) should include(
         "Invalid payload - one or more EORI numbers are required in your body"
@@ -76,7 +76,7 @@ class EoriControllerSpec extends BaseSpec {
     }
 
     "return 400 for exceeding eori limit" in {
-      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris().apply(request(eorisExceedingLimit))
+      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris.apply(request(eorisExceedingLimit))
       status(result) shouldBe Status.BAD_REQUEST
       contentAsString(result) should include(
         s"Invalid payload - you have exceeded the maximum of ${appContext.eisApiLimit} EORI numbers"
@@ -84,7 +84,7 @@ class EoriControllerSpec extends BaseSpec {
     }
 
     "return 400 for payload which doesn't match the eori regex" in {
-      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris().apply(request(List("AA123456789")))
+      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris.apply(request(List("AA123456789")))
       status(result) shouldBe Status.BAD_REQUEST
       contentAsString(result) should include(
         "Invalid payload - one or more EORI numbers are not valid, " +
@@ -93,7 +93,7 @@ class EoriControllerSpec extends BaseSpec {
     }
 
     "return 400 for payload which features an XI number" in {
-      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris().apply(request(xiEoriNumbers))
+      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris.apply(request(xiEoriNumbers))
       status(result) shouldBe Status.BAD_REQUEST
       contentAsString(result) should include(
         "Invalid payload - one or more EORI numbers begin with XI." +
@@ -103,7 +103,7 @@ class EoriControllerSpec extends BaseSpec {
     }
 
     "return expected Json" in {
-      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris().apply(request(validAndInvalidEoris))
+      val result: Future[play.api.mvc.Result] = controller.checkMultipleEoris.apply(request(validAndInvalidEoris))
       contentAsJson(result) shouldEqual Json.toJson(
         List(checkResponse, invalidCheckResponse)
       )

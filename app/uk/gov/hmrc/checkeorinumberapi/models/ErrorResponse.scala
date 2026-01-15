@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.checkeorinumberapi.models
 
-import play.api.libs.json.{Json, OFormat, Writes}
+import play.api.libs.json.{Json, Writes}
 
 case class ErrorResponse(code: String, message: String)
 

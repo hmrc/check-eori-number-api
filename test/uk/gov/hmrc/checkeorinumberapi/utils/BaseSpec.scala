@@ -35,7 +35,7 @@ trait BaseSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   val env: Environment                                 = Environment.simple()
   val configuration: Configuration                     = Configuration.load(env)
   val serviceConfig                                    = new ServicesConfig(configuration)
-  val appContext                                       = new AppContext(configuration, serviceConfig)
+  val appContext                                       = new AppContext(serviceConfig)
   implicit val executionContext: ExecutionContext      = app.injector.instanceOf[ExecutionContext]
   implicit val headerCarrier: HeaderCarrier            = HeaderCarrier()
 

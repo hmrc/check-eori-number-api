@@ -6,7 +6,7 @@ import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
 
 scalafmtOnCompile := true
 ThisBuild / majorVersion := 1
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "3.3.7"
 
 lazy val scoverageSettings = Seq(
   ScoverageKeys.coverageExcludedPackages := scoverageExcludePatterns.mkString("", ";", ""),
@@ -20,6 +20,8 @@ PlayKeys.playDefaultPort := 8353
 scalacOptions += "-Wconf:src=html/.*:s"
 scalacOptions += "-Wconf:src=routes/.*:s"
 scalacOptions += "-Wconf:src=txt/.*:s"
+scalacOptions += "-Wconf:msg=unused import&src=html/.*:s"
+scalacOptions += "-Wconf:msg=Flag.*repeatedly:s"
 lazy val plugins: Seq[Plugins]         = Seq(PlayScala, SbtDistributablesPlugin)
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(
