@@ -37,6 +37,7 @@ lazy val microservice = Project(name, file("."))
     defaultSettings(),
     PlayKeys.playDefaultPort := 9002,
     libraryDependencies ++= AppDependencies.all,
+    excludeDependencies += ExclusionRule("org.lz4", "lz4-java"),
     Test / parallelExecution := false,
     Test / fork              := false,
     retrieveManaged          := true
