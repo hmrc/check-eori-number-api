@@ -43,10 +43,7 @@ class EoriController @Inject() (
 
   def jsonBadRequest(message: String): Result = {
     val errorResponse = ErrorResponse("INVALID_REQUEST", message)
-    if (appContext.formattedJsonResponseFlag) { BadRequest(Json.toJson(errorResponse)) }
-    else {
-      BadRequest(message)
-    }
+    BadRequest(Json.toJson(errorResponse))
   }
 
   def checkMultipleEoris: Action[JsValue] = {

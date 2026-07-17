@@ -25,8 +25,7 @@ class AppContext @Inject() (servicesConfig: ServicesConfig) {
   private lazy val chenUrl: String = servicesConfig.getConfString("check-eori-number.url", "")
   lazy val eisUrl: String          = s"${servicesConfig.baseUrl("check-eori-number")}/$chenUrl"
 
-  lazy val apiContext: String                 = servicesConfig.getString("api.context")
-  lazy val allowXiEoriNumbers: Boolean        = servicesConfig.getBoolean("allowXiEoriNumbers")
-  lazy val eisApiLimit: Int                   = servicesConfig.getInt("eisApiLimit")
-  lazy val formattedJsonResponseFlag: Boolean = servicesConfig.getBoolean("formattedJsonResponseFlag");
+  lazy val apiContext: String          = servicesConfig.getString("api.context")
+  lazy val allowXiEoriNumbers: Boolean = servicesConfig.getBoolean("allowXiEoriNumbers")
+  lazy val eisApiLimit: Int            = servicesConfig.getInt("eisApiLimit")
 }
