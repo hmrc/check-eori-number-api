@@ -1,3 +1,6 @@
-# microservice specific routes
+# dynamic definition routes
+GET    /api/definition            @uk.gov.hmrc.checkeorinumberapi.controllers.ApiDocumentationController.definition()
+GET    /api/conf/:version/*file   @uk.gov.hmrc.checkeorinumberapi.controllers.ApiDocumentationController.conf(version, file)
 
-POST          /check-multiple-eori   @uk.gov.hmrc.checkeorinumberapi.controllers.EoriController.checkMultipleEoris
+# microservice specific routes
+POST    /check-multiple-eori   @uk.gov.hmrc.checkeorinumberapi.controllers.EoriController.checkMultipleEoris
