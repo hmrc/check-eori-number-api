@@ -21,10 +21,10 @@ Getting started with Check EORI number API
 
 2. Start the services:
 
-       Run the services against the current versions in dev, stop the CHEN_FRONTEND service and  start manually
+       Run the services against the current versions in dev, stop the EORI_CHECKER_FRONTEND service and  start manually
        
-           sm2 --start CHEN_ALL 
-           sm2 --stop CHEN_API
+           sm2 --start EORI_CHECKER_ALL 
+           sm2 --stop EORI_CHECKER_API
            cd check-eori-number-api
            sbt run
 
