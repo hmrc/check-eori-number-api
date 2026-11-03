@@ -80,12 +80,23 @@ class EoriController @Inject() (
                 )
               )
             case _                                                                              =>
-              connector.checkEoriNumbers(cmr).map { checkResponse =>
-                Ok(Json.toJson(checkResponse))
+              // logic here to filter list
+              if (validateRequest(cmr.eoris)) {
+                connector.checkEoriNumbers(cmr).map { checkResponse =>
+                  Ok(Json.toJson(checkResponse))
+                }
+              } else {
+                Future.successful(Forbidden("Service Unavailable"))
               }
           }
         })
       }
     }
   }
+
+  private def validateRequest(eoris: List[EoriNumber]): Boolean =
+    if (eoris.size > 1) {
+      val strippedEoris = eoris.map(_.drop(2).toLong).sorted
+      !strippedEoris.sliding(2).forall(pair => pair(1) == pair(0) + 1)
+    } else true
 }
